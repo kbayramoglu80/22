@@ -1,0 +1,44 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+<main>
+    <div class="slider-area">
+        <div class="single-slider slider-height2 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="hero-cap text-center">
+                            <h2><%= product.name %></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="product-details-area padding-bottom" style="padding: 60px 0;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <div style="border-radius: 22px; overflow: hidden; background: #fafafa; padding: 20px;">
+                        <img src="<%= product.imageUrl %>" alt="<%= product.name %>" style="width: 100%; height: auto; object-fit: contain;">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div style="background: #fff; border: 1px solid #eee; border-radius: 22px; padding: 35px;">
+                        <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 20px;"><%= product.name %></h2>
+                        <p style="font-size: 1rem; color: #555; line-height: 1.8; margin-bottom: 30px;"><%= product.description || 'Bu ürün için henüz açıklama eklenmemiş.' %></p>
+                        <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 30px;">
+                            <span style="font-size: 2rem; font-weight: 800; color: #111;">₺ <%= product.price.toLocaleString('tr-TR') %></span>
+                            <span style="font-size: 0.95rem; color: #777;">Ürün adı, görseli ve açıklamasıyla tek sayfa.</span>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+                            <a href="/urunler" style="display: inline-flex; align-items: center; justify-content: center; min-width: 170px; padding: 14px 24px; background: #111; color: #fff; border-radius: 999px; font-weight: 700; text-decoration: none;">Tüm Ürünlere Dön</a>
+                            <button onclick="window.location.href='/cart'" style="min-width: 170px; padding: 14px 24px; background: transparent; color: #111; border: 1px solid #111; border-radius: 999px; font-weight: 700; cursor: pointer;">Sepete Git</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<%- include('partials/footer') %>

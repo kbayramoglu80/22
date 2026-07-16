@@ -1,0 +1,55 @@
+<%- include('partials/head') %>
+    <%- include('partials/header') %>
+
+        <main>
+            <section class="auth-page">
+                <div class="container">
+                    <div class="auth-card">
+                        <div class="row g-0">
+                            <div class="col-lg-5 auth-panel auth-panel--highlight">
+                                <div class="auth-brand" style="background: transparent; padding: 10px 14px; border-radius: 10px; display: flex; justify-content: center; align-items: center; border: none;">
+                                    <span style="color: #ffffff; font-size: 24px; font-weight: 700; letter-spacing: 0.08em;">Alina Help</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 auth-panel">
+                                <h3 class="auth-title" style="font-size: 24px;">Giriş Yap</h3>
+                                <p class="auth-subtitle">Hesabınıza erişmek için bilgilerinizi girin.</p>
+                                <% if (error) { %>
+                                    <div class="alert alert-danger" style="border-radius: 14px;">
+                                        <%= error %>
+                                    </div>
+                                    <% } %>
+                                        <form class="auth-form row g-3" action="/login" method="post"
+                                            novalidate="novalidate">
+                                            <div class="col-12">
+                                                <label for="email" class="form-label"
+                                                    style="font-weight: 600;">E-posta</label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                    value="" placeholder="ornek@email.com">
+                                            </div>
+                                            <div class="col-12">
+                                                <label for="password" class="form-label"
+                                                    style="font-weight: 600;">Şifre</label>
+                                                <input type="password" class="form-control" id="password"
+                                                    name="password" value="" placeholder="Şifreniz">
+                                            </div>
+                                            <div class="col-12 mt-2">
+                                                <button type="submit" class="btn_3 w-100">Giriş Yap</button>
+                                            </div>
+                                            <div class="col-12 text-center mt-2">
+                                                <a href="/register" class="auth-link">Hesabınız yok mu? Hemen kayıt
+                                                    olun.</a>
+                                            </div>
+                                            <div class="col-12 text-center mt-2 pt-3 border-top"
+                                                style="border-color: #efe7dc !important;">
+                                                <a href="/checkout" class="auth-link">Üye olmadan devam et</a>
+                                            </div>
+                                        </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <%- include('partials/footer') %>

@@ -10,9 +10,8 @@
                                 <div class="auth-brand" style="background: transparent; padding: 10px 14px; border-radius: 10px; display: flex; justify-content: center; align-items: center; border: none;">
                                     <span style="color: #ffffff; font-size: 24px; font-weight: 700; letter-spacing: 0.08em;">Alina Help</span>
                                 </div>
-                                <h2 class="auth-title" style="color: #ffffff; text-align: center;">Yeni hesap açın.</h2>
-                                <p class="auth-subtitle">Kayıt olarak favorilerinizi saklayabilir, sipariş geçmişinizi
-                                    görüntüleyebilir ve özel tekliflerden haberdar olabilirsiniz.</p>
+                                <h2 class="auth-title" style="color: #ffffff; text-align: center;"><%= t('create_account','Yeni hesap açın.') %></h2>
+                                <p class="auth-subtitle"><%= t('create_account_desc','Kayıt olarak favorilerinizi saklayabilir, sipariş geçmişinizi görüntüleyebilir ve özel tekliflerden haberdar olabilirsiniz.') %></p>
                                 <ul class="auth-list">
                                     <li>Özel ürünleri daha hızlı takip edin</li>
                                     <li>Favori listesi oluşturun</li>
@@ -20,8 +19,8 @@
                                 </ul>
                             </div>
                             <div class="col-lg-7 auth-panel">
-                                <h3 class="auth-title" style="font-size: 24px;">Kayıt Ol</h3>
-                                <p class="auth-subtitle">Hesabınızı oluşturmak için bilgilerinizi girin.</p>
+                                <h3 class="auth-title" style="font-size: 24px;"><%= t('register','Kayıt Ol') %></h3>
+                                <p class="auth-subtitle"><%= t('register_subtitle','Hesabınızı oluşturmak için bilgilerinizi girin.') %></p>
                                 <% if (error) { %>
                                     <div class="alert alert-danger" style="border-radius: 14px;">
                                         <%= error %>
@@ -30,29 +29,27 @@
                                         <form class="auth-form row g-3" action="/register" method="post"
                                             novalidate="novalidate">
                                             <div class="col-12">
-                                                <label for="name" class="form-label" style="font-weight: 600;">Ad
-                                                    Soyad</label>
+                                                <label for="name" class="form-label" style="font-weight: 600;"><%= t('full_name','Ad Soyad') %></label>
                                                 <input type="text" class="form-control" id="name" name="name" value=""
-                                                    placeholder="Adınız Soyadınız">
+                                                    placeholder="<%= t('full_name_placeholder','Adınız Soyadınız') %>">
                                             </div>
                                             <div class="col-12">
                                                 <label for="email" class="form-label"
-                                                    style="font-weight: 600;">E-posta</label>
+                                                    style="font-weight: 600;"><%= t('email','E-posta') %></label>
                                                 <input type="email" class="form-control" id="email" name="email"
-                                                    value="" placeholder="ornek@email.com">
+                                                    value="" placeholder="<%= t('email_placeholder','ornek@email.com') %>">
                                             </div>
                                             <div class="col-12">
                                                 <label for="password" class="form-label"
-                                                    style="font-weight: 600;">Şifre</label>
+                                                    style="font-weight: 600;"><%= t('password','Şifre') %></label>
                                                 <input type="password" class="form-control" id="password"
-                                                    name="password" value="" placeholder="Şifreniz">
+                                                    name="password" value="" placeholder="<%= t('password_placeholder','Şifreniz') %>">
                                             </div>
                                             <div class="col-12 mt-2">
-                                                <button type="submit" class="btn_3 w-100">Kayıt Ol</button>
+                                                <button type="submit" class="btn_3 w-100"><%= t('register','Kayıt Ol') %></button>
                                             </div>
                                             <div class="col-12 text-center mt-2">
-                                                <a href="/login" class="auth-link">Zaten hesabınız var mı? Giriş
-                                                    yapın.</a>
+                                                <a href="/login" class="auth-link"><%= t('already_have_account','Zaten hesabınız var mı? Giriş yapın.') %></a>
                                             </div>
                                         </form>
                             </div>

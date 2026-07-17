@@ -192,7 +192,8 @@ exports.uploadTemp = async (req, res) => {
 exports.addProduct = async (req, res) => {
     try {
         const {
-            name, description, price, category, categories: categoriesInput, stock, isPopular,
+            name, name_en, name_ru, description, description_en, description_ru,
+            price, category, categories: categoriesInput, stock, isPopular,
             existingImages, existingImagesOrder, videoUrl, videoOrder,
             productCode, metal, metalColor, gemType, caratWeight,
             gemColor, gemClarity, gemCut, certificate
@@ -267,7 +268,9 @@ exports.addProduct = async (req, res) => {
         const categoriesArr = rawCategories ? (Array.isArray(rawCategories) ? rawCategories : [rawCategories]) : [];
 
         const newProduct = new Product({
-            name, description, price: parsedPrice, categories: categoriesArr, stock,
+            name, name_en: name_en || '', name_ru: name_ru || '',
+            description, description_en: description_en || '', description_ru: description_ru || '',
+            price: parsedPrice, categories: categoriesArr, stock,
             imageUrl, images,
             videoUrl: finalVideoUrl,
             videoOrder: parsedVideoOrder,
@@ -295,7 +298,8 @@ exports.addProduct = async (req, res) => {
 exports.editProduct = async (req, res) => {
     try {
         const {
-            name, description, price, category, categories: categoriesInput, stock, isPopular,
+            name, name_en, name_ru, description, description_en, description_ru,
+            price, category, categories: categoriesInput, stock, isPopular,
             existingImages, videoUrl, videoOrder, deleteVideo,
             productCode, metal, metalColor, gemType, caratWeight,
             gemColor, gemClarity, gemCut, certificate
@@ -337,7 +341,9 @@ exports.editProduct = async (req, res) => {
         const categoriesArrEdit = rawCategoriesEdit ? (Array.isArray(rawCategoriesEdit) ? rawCategoriesEdit : [rawCategoriesEdit]) : [];
 
         let updateData = {
-            name, description, price: parsedPrice, categories: categoriesArrEdit, stock,
+            name, name_en: name_en || '', name_ru: name_ru || '',
+            description, description_en: description_en || '', description_ru: description_ru || '',
+            price: parsedPrice, categories: categoriesArrEdit, stock,
             isPopular: isPopular === 'on',
             productCode: productCode || '',
             metal: metal || '',

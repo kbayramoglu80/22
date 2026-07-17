@@ -95,20 +95,40 @@
         color: #1f3a66;
     }
 
-    .lang-selector {
-        padding: 6px 12px;
-        border: 1px solid rgba(0, 0, 0, 0.08);
+    .lang-switcher {
+        display: inline-flex;
+        gap: 8px;
+        padding: 5px;
         border-radius: 999px;
-        font-size: 12px;
-        color: #333333;
-        background: #f8f8f8;
-        cursor: pointer;
-        transition: all 0.3s ease;
+        background: rgba(111, 120, 255, 0.08);
+        border: 1px solid rgba(111, 120, 255, 0.16);
     }
 
-    .lang-selector:hover {
-        border-color: #1f3a66;
+    .lang-switcher-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
         background: #ffffff;
+        color: #333333;
+        font-size: 18px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+
+    .lang-switcher-item:hover {
+        transform: translateY(-1px);
+        border-color: rgba(111, 120, 255, 0.28);
+    }
+
+    .lang-switcher-item.active {
+        background: linear-gradient(135deg, #5b6bff, #aa76ff);
+        color: #ffffff;
+        box-shadow: 0 10px 24px rgba(91, 107, 255, 0.16);
+        border-color: rgba(255, 255, 255, 0.24);
     }
 
     /* Navigation Row */
@@ -209,193 +229,40 @@
     /* Mobile styles */
     @media (max-width: 991px) {
         .header-top {
-            display: none !important;
+            display: flex !important;
+            padding: 16px 0;
         }
 
         .header-middle,
-        .header-bottom {
-            display: none;
-        }
-
+        .header-bottom,
+        .mobile-header-top,
+        .mobile-search-wrapper,
         .mobile_menu {
-            position: relative;
-            margin-top: 0;
-            min-height: 0;
-        }
-
-        .mobile_menu .slicknav_menu {
-            padding: 0;
-            background: transparent;
-        }
-
-        .mobile_menu .slicknav_btn {
             display: none !important;
-            /* Hide default slicknav button */
         }
-
-        .mobile_menu .slicknav_nav {
-            margin-top: 5px !important;
-            padding: 8px 0;
-            border-radius: 12px;
-            background: #fff;
-            border: 1px solid #e5e5e5;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            position: absolute;
-            width: 100%;
-            left: 0;
-            z-index: 1000;
-        }
-
-        .mobile_menu .slicknav_nav a {
-            padding: 12px 18px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #2a4066;
-            transition: all 0.2s ease;
-        }
-
-        .mobile_menu .slicknav_nav a:hover {
-            background-color: #fcf9f2;
-            color: #c49b45;
-        }
-
-        /* Premium Balanced Mobile Header Top */
-        .mobile-header-top {
-            display: flex !important;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            background-color: #ffffff;
-            position: relative;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        }
-
-        .mobile-header-left,
-        .mobile-header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            width: 90px;
-            /* Constrain width to ensure perfect logo centering */
-        }
-
-        .mobile-header-left {
-            justify-content: flex-start;
-        }
-
-        .mobile-header-right {
-            justify-content: flex-end;
-        }
-
-        .mobile-menu-btn,
-        .mobile-search-btn,
-        .mobile-icon-link {
-            background: transparent;
-            border: none;
-            color: #111111;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 4px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            position: relative;
-            transition: color 0.2s ease;
-        }
-
-        .mobile-menu-btn:hover,
-        .mobile-search-btn:hover,
-        .mobile-icon-link:hover {
-            color: #c49b45;
-        }
-
-        .mobile-cart-badge {
-            position: absolute;
-            top: -4px;
-            right: -8px;
-            background-color: #d9534f;
-            color: white;
-            border-radius: 50%;
-            font-size: 10px;
-            padding: 2px 5px;
-            font-family: sans-serif;
-            font-weight: 600;
-            line-height: 1;
-        }
-
-        .mobile-header-center {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .mobile-logo-link {
-            display: block;
-            height: 46px;
-            width: 130px;
-            position: relative;
-        }
-
-        .mobile-logo-link img {
-            height: 130px;
-            width: auto;
-            position: absolute;
-            top: -42px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1060;
-            object-fit: contain;
-        }
-
-        /* Collapsible Mobile Search Wrapper */
-        .mobile-search-wrapper {
-            padding: 12px 15px;
-            border-top: 1px solid #f5f5f5;
-            border-bottom: 1px solid #f5f5f5;
-            background-color: #ffffff;
-            margin: 0 -15px;
-            /* Bleed to full width inside padded container */
-            animation: slideDown 0.3s ease-out forwards;
-        }
-
     }
 </style>
 
 <header class="custom-header">
     <div class="container-fluid">
-        <!-- Top Row: Centered Logo + Top Right Icons -->
-        <div class="header-top d-none d-lg-flex">
-            <!-- Centered Logo -->
-            <div class="header-logo">
-                <a href="/" style="display: inline-flex; align-items: center; text-decoration: none; color: #111111; font-size: 24px; font-weight: 700; letter-spacing: 0.08em;">
-                    Alina Help
+        <div class="header-top">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <div class="lang-switcher" role="group" aria-label="<%= t('language_switch','Dil Değiştir') %>">
+                    <a href="/lang/tr" class="lang-switcher-item <%= (locals.currentLang === 'tr') ? 'active' : '' %>" aria-label="Türkçe">🇹🇷</a>
+                    <a href="/lang/en" class="lang-switcher-item <%= (locals.currentLang === 'en') ? 'active' : '' %>" aria-label="English">🇬🇧</a>
+                    <a href="/lang/ru" class="lang-switcher-item <%= (locals.currentLang === 'ru') ? 'active' : '' %>" aria-label="Русский">🇷🇺</a>
+                </div>
+            </div>
+
+            <div class="header-logo" style="flex: 1; text-align: center;">
+                <a href="/" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; color: #111111; font-size: 24px; font-weight: 700; letter-spacing: 0.08em;">
+                    <%= t('site_name', 'Alina İçin Destek') %>
                 </a>
             </div>
 
-            <!-- Top Right Icons -->
-            <div class="header-top-icons">
-                <select class="lang-selector">
-                    <option value="tr">Türkçe</option>
-                    <option value="en">English</option>
-                </select>
-                <a href="<%= user ? '/user/profile' : '/auth/login' %>" title="<%= user ? 'Hesabım' : 'Giriş Yap' %>">
-                    <i class="fas fa-user"></i>
-                </a>
-                <a href="/user/favorites" title="Favorilerim">
-                    <i class="fas fa-heart"></i>
-                </a>
-                <a href="/cart" title="Sepetim" style="position: relative;">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span id="cart-count" style="position: absolute; top: -8px; right: -10px; background: #d9534f; color: white; border-radius: 50%; font-size: 10px; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                        <%= locals.cartCount || 0 %>
-                    </span>
-                </a>
-            </div>
+            <div style="width: 48px;"></div>
         </div>
 
-        <!-- Navigation Row: Centered Categories -->
         <div class="header-middle d-none d-lg-block">
             <div class="container-fluid">
                 <ul class="header-nav">
@@ -405,61 +272,18 @@
                 </ul>
             </div>
         </div>
-
-        <!-- Mobile Header -->
-        <div class="mobile-header-top d-flex d-lg-none" style="padding: 12px 0; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.10);">
-            <!-- Left: Menu Button -->
-            <div>
-                <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" style="background: none; border: none; font-size: 20px; color: #2a2a2a; cursor: pointer;" aria-label="Menü">
-                    <i class="fas fa-bars"></i>
-                </button>
-            </div>
-
-            <!-- Center: Logo -->
-            <div class="mobile-header-center">
-                <a href="/" style="display: inline-flex; align-items: center; text-decoration: none; color: #111111; font-size: 22px; font-weight: 700; letter-spacing: 0.08em;">
-                    Alina Help
-                </a>
-            </div>
-
-            <!-- Right: Search + Cart -->
-            <div style="display: flex; gap: 12px; align-items: center;">
-                <button type="button" class="mobile-search-btn" id="mobileSearchBtn" style="background: none; border: none; font-size: 18px; color: #2a2a2a; cursor: pointer;" aria-label="Arama">
-                    <i class="fas fa-search"></i>
-                </button>
-                <a href="/cart" style="position: relative; text-decoration: none; color: #2a2a2a; font-size: 18px;">
-                    <i class="fas fa-shopping-bag"></i>
-                    <span id="mobileCartCount" style="position: absolute; top: -8px; right: -8px; background: #d9534f; color: white; border-radius: 50%; font-size: 10px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
-                        <%= locals.cartCount || 0 %>
-                    </span>
-                </a>
-            </div>
-        </div>
-
-        <!-- Mobile Search Wrapper -->
-        <div class="mobile-search-wrapper d-lg-none" id="mobileSearchWrapper" style="display: none; padding: 12px 0; border-bottom: 1px solid #f0f0f0;">
-            <form action="/urunler" method="GET" style="display: flex; gap: 8px;">
-                <input type="text" name="q" placeholder="Ara..." style="flex: 1; padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 4px; font-size: 13px;">
-                <button type="submit" style="background: none; border: none; color: #2a2a2a; cursor: pointer; font-size: 16px;">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
-        </div>
-
-        <!-- Mobile Menu Placeholder -->
-        <div class="mobile_menu d-block d-lg-none"></div>
     </div>
 </header>
 
 <!-- Hidden nav for Slicknav to build mobile menu -->
 <div class="d-none">
-    <ul id="navigation">
+        <ul id="navigation">
         <li><a href="<%= user ? '/user/profile' : '/auth/login' %>">
-                <%= user ? 'Hesabım' : 'Giriş Yap / Kayıt Ol' %>
+                <%= user ? t('account','Hesabım') : t('login_register','Giriş Yap / Kayıt Ol') %>
             </a></li>
-        <li><a href="/user/favorites">Favorilerim</a></li>
+        <li><a href="/user/favorites"><%= t('favorites','Favorilerim') %></a></li>
         <% if (user && user.role==='admin' ) { %>
-            <li><a href="/admin">Admin Paneli</a></li>
+            <li><a href="/admin"><%= t('admin_panel','Admin Paneli') %></a></li>
         <% } %>
     </ul>
 </div>

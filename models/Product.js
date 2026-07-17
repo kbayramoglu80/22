@@ -10,6 +10,24 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    name_en: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    name_ru: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    description_en: {
+        type: String,
+        default: ''
+    },
+    description_ru: {
+        type: String,
+        default: ''
+    },
     price: {
         type: Number,
         required: true,
@@ -105,6 +123,18 @@ const productSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: ''
+    },
+    // --- PayTR Link Solution (Özel ürünler için direkt link) ---
+    paytrLink: {
+        type: String,
+        trim: true,
+        default: '',
+        validate: {
+            validator: function(v) {
+                return v === '' || /^https:\/\/www\.paytr\.com\/link\/[A-Za-z0-9]+$/.test(v);
+            },
+            message: 'Geçersiz PayTR link formatı. Örnek: https://www.paytr.com/link/UjN3KZs'
+        }
     },
     createdAt: {
         type: Date,

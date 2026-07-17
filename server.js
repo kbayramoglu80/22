@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const app = express();
 const chatController = require('./controllers/chatController');
+const fs = require('fs');
 
 const PORT = process.env.PORT || 3000;
 
@@ -54,14 +55,28 @@ app.set('views', path.join(__dirname, 'views'));
 // Session
 const isProduction = process.env.NODE_ENV === 'production';
 const mongoUri = process.env.MONGODB_URI || process.env.MONGO_URI;
+
+let sessionStore;
+if (mongoUri) {
+    try {
+        sessionStore = (MongoStore.create || MongoStore.default.create)({
+            mongoUrl: mongoUri,
+            ttl: 14 * 24 * 60 * 60 // 14 days
+        });
+    } catch (err) {
+        console.warn('Session store could not be initialized with MongoDB, falling back to memory store.', err.message);
+        sessionStore = new session.MemoryStore();
+    }
+} else {
+    console.warn('No MongoDB URI found. Falling back to in-memory session store.');
+    sessionStore = new session.MemoryStore();
+}
+
 app.use(session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'change-me-in-production',
     resave: false,
     saveUninitialized: false,
-    store: (MongoStore.create || MongoStore.default.create)({
-        mongoUrl: mongoUri,
-        ttl: 14 * 24 * 60 * 60 // 14 days
-    }),
+    store: sessionStore,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
         secure: isProduction,
@@ -69,6 +84,54 @@ app.use(session({
         sameSite: 'lax'
     }
 }));
+
+// --- Simple i18n loader (tr, en, ru)
+const localesDir = path.join(__dirname, 'locales');
+const availableLanguages = ['tr', 'en', 'ru'];
+const translations = {};
+availableLanguages.forEach(code => {
+    try {
+        const content = fs.readFileSync(path.join(localesDir, `${code}.json`), 'utf8');
+        translations[code] = JSON.parse(content);
+    } catch (err) {
+        translations[code] = {};
+    }
+});
+
+app.use((req, res, next) => {
+    // determine current language: session -> accept-language -> default tr
+    const sessionLang = req.session && req.session.lang;
+    const accept = req.acceptsLanguages ? req.acceptsLanguages(availableLanguages) : null;
+    const current = sessionLang || accept || 'tr';
+
+    res.locals.availableLanguages = availableLanguages;
+    res.locals.currentLang = current;
+    res.locals.t = function (key, fallback) {
+        const lang = (req.session && req.session.lang) || current;
+        return (translations[lang] && translations[lang][key]) || fallback || key;
+    };
+    res.locals.tProduct = function (product, field) {
+        if (!product || !field) return '';
+        const lang = (req.session && req.session.lang) || current;
+        if (lang === 'en') {
+            return (product[`${field}_en`] && product[`${field}_en`].trim()) || product[field] || '';
+        }
+        if (lang === 'ru') {
+            return (product[`${field}_ru`] && product[`${field}_ru`].trim()) || product[field] || '';
+        }
+        return product[field] || '';
+    };
+    next();
+});
+
+// language switching route
+app.get('/lang/:code', (req, res) => {
+    const code = req.params.code;
+    if (!availableLanguages.includes(code)) return res.status(400).send('Invalid language');
+    if (req.session) req.session.lang = code;
+    const referer = req.get('Referer') || '/';
+    res.redirect(referer);
+});
 
 // Global variables for views
 app.use(async (req, res, next) => {
@@ -150,18 +213,24 @@ app.use((err, req, res, next) => {
 });
 
 // MongoDB Connection
-mongoose.connect(mongoUri)
-    .then(() => {
-        console.log('MongoDB veritabanına başarıyla bağlanıldı.');
-        app.listen(PORT, () => {
-            console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor.`);
+if (mongoUri) {
+    mongoose.connect(mongoUri)
+        .then(() => {
+            console.log('MongoDB veritabanına başarıyla bağlanıldı.');
+            app.listen(PORT, () => {
+                console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor.`);
+            });
+        })
+        .catch(err => {
+            console.error('MongoDB bağlantı hatası:', err.message);
+            console.log('Lütfen .env dosyasındaki MONGODB_URI adresini kontrol edin.');
+            app.listen(PORT, () => {
+                console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor (MongoDB BAĞLANTISI YOK).`);
+            });
         });
-    })
-    .catch(err => {
-        console.error('MongoDB bağlantı hatası:', err.message);
-        console.log('Lütfen .env dosyasındaki MONGODB_URI adresini kontrol edin.');
-        // Veritabanı olmadan da sunucuyu test edebilmek için geçici olarak başlatıyoruz
-        app.listen(PORT, () => {
-            console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor (MongoDB BAĞLANTISI YOK).`);
-        });
+} else {
+    console.warn('MongoDB URI not configured. Starting server without database connection.');
+    app.listen(PORT, () => {
+        console.log(`Sunucu http://localhost:${PORT} adresinde çalışıyor (MongoDB BAĞLANTISI YOK).`);
     });
+}

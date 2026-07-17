@@ -151,18 +151,13 @@
 
             <!--? Hero Area Removed: Show products directly -->
 
-            <!--? New Arrival Start -->
-            <div class="new-arrival">
+            <div class="home-support-section">
                 <div class="container">
-                    <!-- Section title & Sorting Dropdown -->
                     <div class="row justify-content-center mb-40">
                         <div class="col-xl-7 col-lg-8 col-md-10 text-center">
                             <div class="section-tittle mb-20">
-                                <h2>
-                                    <%= typeof setting !=='undefined' ? (setting.newArrivalTitle || 'Alinaya destek ol' )
-                                        : 'Alinaya destek ol' %>
-                                </h2>
-                                <p>Alina için destek verin, Alina'nın tedavi sürecine katkı sağlayın.</p>
+                                <h2>Alina İçin Destek</h2>
+                                <p><%= t('new_arrival_desc','Alina için destek verin, Alina\'nın tedavi sürecine katkı sağlayın.') %></p>
                             </div>
                         </div>
                     </div>
@@ -177,9 +172,9 @@
                                     style="<%= isHidden ? 'display: none !important;' : '' %>">
                                     <div class="premium-card-img-wrapper">
                                         <a href="/product/<%= product._id %>">
-                                            <img src="<%= product.imageUrl %>" alt="<%= product.name %>"
+                                            <img src="<%= product.imageUrl %>" alt="<%= tProduct(product, 'name') %>"
                                                 class="primary-img">
-                                            <img src="<%= product.imageUrl %>" alt="<%= product.name %>"
+                                            <img src="<%= product.imageUrl %>" alt="<%= tProduct(product, 'name') %>"
                                                 class="secondary-img" style="filter: brightness(0.95);">
                                         </a>
                                         <button class="fav-btn" data-id="<%= product._id %>">
@@ -189,11 +184,10 @@
                                     </div>
                                     <div class="premium-card-info">
                                         <div class="premium-card-title"><a href="/product/<%= product._id %>">
-                                                <%= product.name %>
+                                                <%= tProduct(product, 'name') %>
                                             </a></div>
-                                        <div class="premium-card-desc">
-                                            <%= product.description ? product.description.substring(0,30) + '...'
-                                                : 'Pırlanta Şıklığı' %>
+                                            <div class="premium-card-desc">
+                                            <%= tProduct(product, 'description') ? tProduct(product, 'description').substring(0,30) + '...' : t('default_product_desc','Pırlanta Şıklığı') %>
                                         </div>
                                         <div class="premium-card-price-wrap">
                                             <span class="premium-card-price">₺ <%= product.price.toLocaleString('tr-TR')
@@ -205,18 +199,18 @@
                                         </div>
                                         <div class="card-actions">
                                             <a href="/product/<%= product._id %>" class="btn-premium-secondary"
-                                                style="padding: 10px; font-size: 10px;">İncele</a>
+                                                style="padding: 10px; font-size: 10px;"><%= t('btn_view','İncele') %></a>
                                             <button
-                                                onclick="openHomeAddToCartModal('<%= product._id %>', '<%= product.name %>', '<%= product.price %>', '<%= product.imageUrl %>')"
+                                                onclick="openHomeAddToCartModal('<%= product._id %>', '<%= tProduct(product, 'name') %>', '<%= product.price %>', '<%= product.imageUrl %>', '<%= product.paytrLink || '' %>')"
                                                 class="btn-premium-primary"
-                                                style="padding: 10px; font-size: 10px;">Sepete Ekle</button>
+                                                style="padding: 10px; font-size: 10px; flex: 1;"><%= t('btn_buy_now','Hemen Satın Al') %></button>
                                         </div>
                                     </div>
                                 </div>
                                 <% }); %>
                                     <% } else { %>
                                         <div style="grid-column: 1 / -1; text-align: center; padding: 50px 0;">
-                                            <p style="font-size: 16px; color: #888;">Henüz ürün eklenmemiş.</p>
+                                            <p style="font-size: 16px; color: #888;"><%= t('no_products','Henüz ürün eklenmemiş.') %></p>
                                         </div>
                                         <% } %>
                     </div>
@@ -226,7 +220,7 @@
                             style="<%= (typeof products !== 'undefined' && products.length <= 16) ? 'display: none;' : 'display: flex;' %>">
                             <button id="btnShowMore" class="border-btn"
                                 style="background: transparent; cursor: pointer; border: 1px solid #c49b45; padding: 15px 35px; font-weight: bold; text-transform: uppercase; font-size: 12px; letter-spacing: 2px; transition: all 0.3s ease; border-radius: 4px;">Daha
-                                Fazla Göster</button>
+                                <%= t('show_more','Daha Fazla Göster') %></button>
                         </div>
                     </div>
                 </div>
@@ -255,9 +249,9 @@
                                         <div class="premium-card">
                                             <div class="premium-card-img-wrapper">
                                                 <a href="/product/<%= product._id %>">
-                                                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>"
+                                                    <img src="<%= product.imageUrl %>" alt="<%= tProduct(product, 'name') %>"
                                                         class="primary-img">
-                                                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>"
+                                                    <img src="<%= product.imageUrl %>" alt="<%= tProduct(product, 'name') %>"
                                                         class="secondary-img" style="filter: brightness(0.95);">
                                                 </a>
                                                 <button class="fav-btn" data-id="<%= product._id %>">
@@ -267,11 +261,11 @@
                                             </div>
                                             <div class="premium-card-info">
                                                 <div class="premium-card-title"><a href="/product/<%= product._id %>">
-                                                        <%= product.name %>
+                                                        <%= tProduct(product, 'name') %>
                                                     </a></div>
                                                 <div class="premium-card-desc">
-                                                    <%= product.description ? product.description.substring(0,30)
-                                                        + '...' : 'Pırlanta Şıklığı' %>
+                                                    <%= tProduct(product, 'description') ? tProduct(product, 'description').substring(0,30)
+                                                        + '...' : t('default_product_desc','Pırlanta Şıklığı') %>
                                                 </div>
                                                 <div class="premium-card-price-wrap">
                                                     <span class="premium-card-price">₺ <%=
@@ -286,9 +280,9 @@
                                                     <a href="/product/<%= product._id %>" class="btn-premium-secondary"
                                                         style="padding: 10px; font-size: 10px;">İncele</a>
                                                     <button
-                                                        onclick="openHomeAddToCartModal('<%= product._id %>', '<%= product.name %>', '<%= product.price %>', '<%= product.imageUrl %>')"
+                                                        onclick="openHomeAddToCartModal('<%= product._id %>', '<%= tProduct(product, 'name') %>', '<%= product.price %>', '<%= product.imageUrl %>', '<%= product.paytrLink || '' %>', '<%= product.paytrLink || '' %>')"
                                                         class="btn-premium-primary"
-                                                        style="padding: 10px; font-size: 10px;">Sepete Ekle</button>
+                                                        style="padding: 10px; font-size: 10px; flex: 1;">Hemen Satın Al</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -438,12 +432,13 @@
                                         let mcalibrationCirclePixelsHome = 200;
 
                                         // Ana sayfa sepete ekleme modalı
-                                        function openHomeAddToCartModal(productId, productName, productPrice, productImage) {
+                                        function openHomeAddToCartModal(productId, productName, productPrice, productImage, paytrLink = '') {
                                             currentProduct = {
                                                 _id: productId,
                                                 name: productName,
                                                 price: productPrice,
-                                                imageUrl: productImage
+                                                imageUrl: productImage,
+                                                paytrLink: paytrLink
                                             };
 
                                             const modal = document.getElementById('addToCartModal');
@@ -455,20 +450,9 @@
                                                 <h3 style="font-size: 18px; font-weight: 700; color: #140C40; margin-bottom: 8px;">${productName}</h3>
                                                 <p style="font-size: 20px; font-weight: 700; color: #ff2020; margin-bottom: 20px;">₺${parseFloat(productPrice).toLocaleString('tr-TR')}</p>
                                                 
-                                                <div class="variation-group" style="text-align: left; margin-bottom: 15px;">
-                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                                                        <span style="font-weight: 600; color: #333;">Yüzük Ölçüsü</span>
-                                                        <a href="javascript:void(0)" onclick="openRingSizeModalHome()" style="font-size: 12px; color: #c5a059; font-weight: 600; text-decoration: underline;"><i class="fas fa-question-circle"></i> Ölçümü Nasıl Bulurum?</a>
-                                                    </div>
-                                                    <select id="selected-size-home" class="premium-select" style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;">
-                                                        <option value="">Seçiniz</option>
-                                                        ${ringSizeChartHome.map(s => `<option value="${s.size}">${s.size}</option>`).join('')}
-                                                    </select>
-                                                </div>
-                                                
                                                 <div style="display: flex; gap: 10px; margin-top: 20px;">
                                                     <button onclick="closeAddToCartModal()" class="btn-premium-secondary" style="flex: 1; padding: 12px 20px; font-size: 14px;">İptal</button>
-                                                    <button onclick="addToCartFromHome()" class="btn-premium-primary" style="flex: 1; padding: 12px 20px; font-size: 14px;">Sepete Ekle</button>
+                                                    <button onclick="addToCartFromHome()" class="btn-premium-primary" style="flex: 1; padding: 12px 20px; font-size: 14px;">Hemen Satın Al</button>
                                                 </div>
                                             `;
 
@@ -486,11 +470,11 @@
                                         function addToCartFromHome() {
                                             if (!currentProduct) return;
 
-                                            const sizeSelect = document.getElementById('selected-size-home');
-                                            const selectedSize = sizeSelect.value;
-
-                                            if (!selectedSize) {
-                                                alert('Lütfen bir yüzük ölçüsü seçin!');
+                                            // Eğer bu ürün için direkt PayTR Link varsa, direkt git
+                                            if (currentProduct.paytrLink && currentProduct.paytrLink.trim() !== '') {
+                                                console.log('🔗 PayTR Link Solutions kullanılıyor:', currentProduct.paytrLink);
+                                                closeAddToCartModal();
+                                                window.location.href = currentProduct.paytrLink;
                                                 return;
                                             }
 
@@ -509,193 +493,18 @@
                                             qtyInput.name = 'quantity';
                                             qtyInput.value = '1';
 
-                                            const sizeInput = document.createElement('input');
-                                            sizeInput.type = 'hidden';
-                                            sizeInput.name = 'selectedSize';
-                                            sizeInput.value = selectedSize;
-
                                             form.appendChild(productIdInput);
                                             form.appendChild(qtyInput);
-                                            form.appendChild(sizeInput);
 
                                             document.body.appendChild(form);
                                             form.submit();
                                         }
 
-                                        // Ana sayfa yüzük ölçü bulma modalı fonksiyonları
-                                        function openRingSizeModalHome() {
-                                            const modal = document.getElementById('ringSizeModalHome');
-                                            modal.style.display = 'flex';
-                                            document.body.style.overflow = 'hidden';
-
-                                            goToModalStepHome(1);
-
-                                            // Select'i doldur
-                                            const selectEl = document.getElementById('msize-comparator-select-h');
-                                            if (selectEl && selectEl.children.length === 0) {
-                                                ringSizeChartHome.forEach(item => {
-                                                    const option = document.createElement('option');
-                                                    option.value = item.size;
-                                                    option.text = `Ölçü ${item.size} (${item.diameter.toFixed(2)} mm)`;
-                                                    if (item.size === 15) option.selected = true;
-                                                    selectEl.appendChild(option);
-                                                });
-                                            }
-                                        }
-
-                                        function closeRingSizeModalHome() {
-                                            const modal = document.getElementById('ringSizeModalHome');
-                                            modal.style.display = 'none';
-                                            document.body.style.overflow = '';
-                                        }
-
-                                        function goToModalStepHome(step) {
-                                            document.querySelectorAll('#mstep-content-h1, #mstep-content-h2, #mstep-content-h3').forEach(el => el.style.display = 'none');
-                                            document.getElementById(`mstep-content-h${step}`).style.display = 'block';
-
-                                            document.querySelectorAll('#mstep-dot-h1, #mstep-dot-h2, #mstep-dot-h3').forEach((el, index) => {
-                                                const dotNum = index + 1;
-                                                const numEl = el.querySelector('.modal-step-num');
-
-                                                if (dotNum < step) {
-                                                    el.style.color = '#c5a059';
-                                                    if (numEl) {
-                                                        numEl.style.background = '#28a745';
-                                                        numEl.style.color = '#fff';
-                                                        numEl.innerHTML = '<i class="fas fa-check"></i>';
-                                                    }
-                                                } else if (dotNum === step) {
-                                                    el.style.color = '#c5a059';
-                                                    if (numEl) {
-                                                        numEl.style.background = '#c5a059';
-                                                        numEl.style.color = '#fff';
-                                                        numEl.innerHTML = dotNum;
-                                                    }
-                                                } else {
-                                                    el.style.color = '#aaa';
-                                                    if (numEl) {
-                                                        numEl.style.background = '#eee';
-                                                        numEl.style.color = '#888';
-                                                        numEl.innerHTML = dotNum;
-                                                    }
-                                                }
-                                            });
-
-                                            mcurrentStepHome = step;
-
-                                            if (step === 3) {
-                                                calculateModalRingSizeHome(document.getElementById('mring-measure-slider-h').value);
-                                                updateModalComparatorSizeHome(document.getElementById('msize-comparator-select-h').value);
-                                            }
-                                        }
-
-                                        function resizeModalCalibrationCircleHome(px) {
-                                            mcalibrationCirclePixelsHome = parseInt(px);
-                                            const circle = document.getElementById('mcalibration-circle-h');
-                                            circle.style.width = px + 'px';
-                                            circle.style.height = px + 'px';
-                                            document.getElementById('mcal-pixels-label-h').innerText = `Genişlik: ${px}px`;
-                                        }
-
-                                        function tuneModalCalibrationHome(change) {
-                                            const slider = document.getElementById('mcalibration-slider-h');
-                                            let newValue = parseInt(slider.value) + change;
-                                            if (newValue >= 150 && newValue <= 300) {
-                                                slider.value = newValue;
-                                                resizeModalCalibrationCircleHome(newValue);
-                                            }
-                                        }
-
-                                        function saveModalCalibrationAndContinueHome() {
-                                            mpxPerMmHome = mcalibrationCirclePixelsHome / 26.15;
-                                            goToModalStepHome(3);
-                                        }
-
-                                        function switchModalMeasureModeHome(mode) {
-                                            document.getElementById('mmode-content-ring-h').style.display = mode === 'ring' ? 'block' : 'none';
-                                            document.getElementById('mmode-content-circles-h').style.display = mode === 'circles' ? 'block' : 'none';
-                                            document.getElementById('mtab-btn-ring-h').className = 'measure-tab-btn ' + (mode === 'ring' ? 'active' : '');
-                                            document.getElementById('mtab-btn-circles-h').className = 'measure-tab-btn ' + (mode === 'circles' ? 'active' : '');
-                                            if (mode === 'ring') {
-                                                document.getElementById('mtab-btn-ring-h').style.background = '#c5a059';
-                                                document.getElementById('mtab-btn-ring-h').style.color = '#fff';
-                                                document.getElementById('mtab-btn-ring-h').style.borderColor = '#c5a059';
-                                                document.getElementById('mtab-btn-circles-h').style.background = '#fff';
-                                                document.getElementById('mtab-btn-circles-h').style.color = '#555';
-                                                document.getElementById('mtab-btn-circles-h').style.borderColor = '#ccc';
-                                            } else {
-                                                document.getElementById('mtab-btn-circles-h').style.background = '#c5a059';
-                                                document.getElementById('mtab-btn-circles-h').style.color = '#fff';
-                                                document.getElementById('mtab-btn-circles-h').style.borderColor = '#c5a059';
-                                                document.getElementById('mtab-btn-ring-h').style.background = '#fff';
-                                                document.getElementById('mtab-btn-ring-h').style.color = '#555';
-                                                document.getElementById('mtab-btn-ring-h').style.borderColor = '#ccc';
-                                            }
-                                        }
-
-                                        function resizeModalRingMeasureCircleHome(px) {
-                                            const circle = document.getElementById('mring-measure-circle-h');
-                                            circle.style.width = px + 'px';
-                                            circle.style.height = px + 'px';
-                                            calculateModalRingSizeHome(px);
-                                        }
-
-                                        function tuneModalRingMeasureHome(change) {
-                                            const slider = document.getElementById('mring-measure-slider-h');
-                                            let newValue = parseInt(slider.value) + change;
-                                            if (newValue >= 100 && newValue <= 220) {
-                                                slider.value = newValue;
-                                                resizeModalRingMeasureCircleHome(newValue);
-                                            }
-                                        }
-
-                                        function calculateModalRingSizeHome(px) {
-                                            const diameterMm = px / mpxPerMmHome;
-                                            let closestSize = 15;
-                                            let closestDiff = Infinity;
-
-                                            ringSizeChartHome.forEach(item => {
-                                                const diff = Math.abs(item.diameter - diameterMm);
-                                                if (diff < closestDiff) {
-                                                    closestDiff = diff;
-                                                    closestSize = item.size;
-                                                }
-                                            });
-
-                                            document.getElementById('mring-size-result-label-h').innerText = closestSize;
-                                            document.getElementById('mring-diameter-result-label-h').innerText = diameterMm.toFixed(2) + ' mm';
-                                        }
-
-                                        function updateModalComparatorSizeHome(size) {
-                                            const sizeData = ringSizeChartHome.find(s => s.size === parseInt(size));
-                                            if (sizeData) {
-                                                const pxSize = Math.round(sizeData.diameter * mpxPerMmHome);
-                                                const circle = document.getElementById('mring-compare-circle-h');
-                                                circle.style.width = pxSize + 'px';
-                                                circle.style.height = pxSize + 'px';
-                                                document.getElementById('mring-compare-label-h').innerText = size;
-                                                document.getElementById('mring-compare-diameter-label-h').innerText = sizeData.diameter.toFixed(2) + ' mm';
-                                            }
-                                        }
-
-                                        function applyRingSizeToHomeModal() {
-                                            const foundSize = document.getElementById('mring-size-result-label-h').innerText;
-                                            const sizeSelect = document.getElementById('selected-size-home');
-                                            if (sizeSelect) {
-                                                sizeSelect.value = foundSize;
-                                            }
-                                            closeRingSizeModalHome();
-                                        }
-
                                         // Modal dışına tıklandığında kapat
                                         window.addEventListener('click', function (event) {
                                             const addModal = document.getElementById('addToCartModal');
-                                            const sizeModal = document.getElementById('ringSizeModalHome');
                                             if (event.target === addModal) {
                                                 closeAddToCartModal();
-                                            }
-                                            if (event.target === sizeModal) {
-                                                closeRingSizeModalHome();
                                             }
                                         });
                                     </script>
@@ -717,44 +526,7 @@
             </div>
         </div>
 
-        <!-- Yüzük Ölçüsü Bulma Modalı (1 TL Entegrasyonu) - Ana sayfa için kopya -->
-        <div id="ringSizeModalHome" class="ring-size-modal"
-            style="display:none; position:fixed; z-index:1200; left:0; top:0; width:100%; height:100%; overflow:hidden; background-color:rgba(0,0,0,0.6); backdrop-filter: blur(8px); justify-content:center; align-items:center;">
-            <div class="ring-size-modal-content"
-                style="background-color:#ffffff; margin:auto; padding:25px; border-radius:20px; width:90%; max-width:600px; box-shadow:0 20px 50px rgba(0,0,0,0.15); border:1px solid rgba(196,155,69,0.2); position:relative; animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); min-height: 520px; max-height: 95vh; overflow-y: auto; display: flex; flex-direction: column; justify-content: space-between;">
-                <span class="ring-size-close" onclick="closeRingSizeModalHome()"
-                    style="color:#aaa; position:absolute; right:20px; top:15px; font-size:28px; font-weight:bold; cursor:pointer; transition:color 0.2s; z-index: 10;">&times;</span>
 
-                <!-- Step Indicator -->
-                <div class="modal-wizard-steps"
-                    style="display: flex; justify-content: space-between; margin-bottom: 20px; position: relative; z-index: 2;">
-                    <div class="modal-step-item active" id="mstep-dot-h1"
-                        style="flex: 1; text-align: center; font-size: 11px; font-weight: 700; color: #c5a059;">
-                        <div class="modal-step-num"
-                            style="width: 28px; height: 28px; border-radius: 50%; background: #c5a059; color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-weight: bold; font-size: 11px;">
-                            1</div>
-                        Giriş
-                    </div>
-                    <div class="modal-step-item" id="mstep-dot-h2"
-                        style="flex: 1; text-align: center; font-size: 11px; font-weight: 500; color: #aaa;">
-                        <div class="modal-step-num"
-                            style="width: 28px; height: 28px; border-radius: 50%; background: #eee; color: #888; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-weight: bold; font-size: 11px;">
-                            2</div>
-                        Kalibrasyon
-                    </div>
-                    <div class="modal-step-item" id="mstep-dot-h3"
-                        style="flex: 1; text-align: center; font-size: 11px; font-weight: 500; color: #aaa;">
-                        <div class="modal-step-num"
-                            style="width: 28px; height: 28px; border-radius: 50%; background: #eee; color: #888; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; font-weight: bold; font-size: 11px;">
-                            3</div>
-                        Ölçüm
-                    </div>
-                </div>
-
-                <!-- Step Content 1: Welcome -->
-                <div id="mstep-content-h1" class="mstep-content" style="text-align: center; margin-bottom: 10px;">
-                    <div style="margin-bottom: 15px; font-size: 22px; font-weight: 700; color: #140C40;">
-                        Kuyumcu
                     </div>
                     <h3
                         style="font-size: 18px; font-weight: 700; color: #140C40; margin-bottom: 10px; font-family: 'Montserrat', sans-serif;">

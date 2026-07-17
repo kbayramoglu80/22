@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap text-center">
-                            <h2><%= product.name || 'Ürün Detayı' %></h2>
+                            <h2><%= tProduct(product, 'name') || t('product_detail','Ürün Detayı') %></h2>
                         </div>
                     </div>
                 </div>
@@ -26,7 +26,7 @@
                             <div class="pdp-gallery-col">
                                 <!-- Main Image / Video Area -->
                                 <div class="pdp-main-image" id="main-image-container">
-                                    <img src="<%= product.imageUrl %>" id="main-product-image" alt="<%= product.name %>">
+                                    <img src="<%= product.imageUrl %>" id="main-product-image" alt="<%= tProduct(product, 'name') %>">
                                     <video id="main-product-video" controls playsinline webkit-playsinline
                                         preload="metadata"
                                         style="display:none; width: 100%; height: auto; max-height: 600px; object-fit: contain;"></video>
@@ -83,7 +83,7 @@
                                 <span class="pdp-sku">SKU: <%= product._id.toString().substring(0,8).toUpperCase() %>
                                         </span>
                                 <h1 class="pdp-title">
-                                    <%= product.name %>
+                                    <%= tProduct(product, 'name') %>
                                 </h1>
 
                                 <div class="pdp-price-area">
@@ -98,13 +98,13 @@
 
                                 <div class="pdp-description"
                                     style="font-size: 14px; color: var(--premium-gray); line-height: 1.6; margin-bottom: 30px;">
-                                    <%= product.description %>
+                                    <%= tProduct(product, 'description') %>
                                 </div>
 
                                 <!-- DİNAMİK METAL RENKLERİ -->
                                 <% if (product.metalColor) { %>
                                     <div class="variation-group">
-                                        <div class="variation-label">Altın Rengi <span id="color-label">
+                                        <div class="variation-label"><%= t('metal_color','Altın Rengi') %> <span id="color-label">
                                                 <%= product.metalColor %>
                                             </span></div>
                                         <div class="swatch-list">
@@ -133,9 +133,9 @@
 
                                         <% if (product.caratOptions && product.caratOptions.length> 0) { %>
                                             <div class="variation-group">
-                                                <div class="variation-label">Karat Büyüklüğü <small
-                                                        class="text-muted">(Seçim İsteğe Bağlıdır)</small> <span
-                                                        id="carat-label">Seçilmedi</span></div>
+                                                <div class="variation-label"><%= t('carat_size','Karat Büyüklüğü') %> <small
+                                                        class="text-muted">(<%= t('optional','Seçim İsteğe Bağlıdır') %>)</small> <span
+                                                        id="carat-label"><%= t('not_selected','Seçilmedi') %></span></div>
                                                 <div class="pill-list">
                                                     <% product.caratOptions.forEach(opt=> { %>
                                                         <div class="pill-item"
@@ -145,31 +145,21 @@
                                                         <% }); %>
                                                             <div class="pill-item active" id="pill-default-carat"
                                                                 onclick="selectCaratOption(this, '', '<%= product.price %>')">
-                                                                Seçimi Kaldır</div>
+                                                                <%= t('remove_selection','Seçimi Kaldır') %></div>
                                                 </div>
                                             </div>
                                             <% } %>
                                                 <input type="hidden" id="selected-carat-input" value="">
-                                            <div class="variation-group">
-                                                <div class="variation-label">Adet</div>
-                                                <div class="quantity-selector" style="margin-bottom: 20px;">
-                                                    <button type="button" class="qty-btn" onclick="decreaseQty()"><i class="fas fa-minus"></i></button>
-                                                    <input type="number" id="quantityInput" value="1" min="1" max="<%= product.stock || 1 %>" readonly>
-                                                    <button type="button" class="qty-btn" onclick="increaseQty()"><i class="fas fa-plus"></i></button>
-                                                </div>
-                                            </div>
+                                                <input type="hidden" id="quantityInput" value="1">
 
                                                 </div>
 
                                                 <!-- ACTIONS -->
                                                 <div class="pdp-actions"
                                                     style="display: flex; align-items: center; gap: 15px;">
-                                                    <button id="btn-add-cart" class="btn-premium-secondary"
-                                                        onclick="handleCartAction('<%= product._id %>', false)">Sepete
-                                                        Ekle</button>
-                                                    <button id="btn-buy-now" class="btn-premium-primary"
-                                                        onclick="handleCartAction('<%= product._id %>', true)">Hemen
-                                                        Satın Al</button>
+                                                    <button id="btn-buy-now" class="btn-premium-primary" style="flex: 1;"
+                                                        data-paytr-link="<%= product.paytrLink || '' %>"
+                                                        onclick="handleCartAction('<%= product._id %>', true)"><%= t('btn_buy_now','Hemen Satın Al') %></button>
                                                     <button class="fav-btn fav-btn-pdp" data-id="<%= product._id %>"
                                                         style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #1a1a1a; background: #fff; color: #1a1a1a; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; cursor: pointer; transition: all 0.3s; flex-shrink: 0; padding: 0; outline: none;">
                                                         <i
@@ -762,6 +752,19 @@
 
     // Keep existing functions for compatibility
     function handleCartAction(productId, isBuyNow) {
+        if (isBuyNow) {
+            const btn = document.getElementById('btn-buy-now');
+            const paytrLink = btn ? btn.getAttribute('data-paytr-link') : '';
+            
+            // Eğer bu ürün için direkt PayTR Link varsa, direkt git
+            if (paytrLink && paytrLink.trim() !== '') {
+                console.log('🔗 PayTR Link Solutions kullanılıyor:', paytrLink);
+                window.location.href = paytrLink;
+                return;
+            }
+        }
+        
+        // Normal flow: sepete ekle ve checkout'a git
         addToCart(productId, isBuyNow);
     }
 

@@ -24,8 +24,8 @@
                         <div class="premium-card wow fadeInUp" data-wow-duration="1s" data-wow-delay=".1s">
                             <div class="premium-card-img-wrapper">
                                 <a href="/product/<%= product._id %>">
-                                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="primary-img">
-                                    <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="secondary-img" style="filter: brightness(0.95);">
+                                    <img src="<%= product.imageUrl %>" alt="<%= tProduct(product, 'name') %>" class="primary-img">
+                                    <img src="<%= product.imageUrl %>" alt="<%= tProduct(product, 'name') %>" class="secondary-img" style="filter: brightness(0.95);">
                                 </a>
                                 <button class="fav-btn" data-id="<%= product._id %>">
                                     <i class="fas fa-heart text-danger"></i>
@@ -33,10 +33,10 @@
                             </div>
                             <div class="premium-card-info">
                                 <div class="premium-card-title">
-                                    <a href="/product/<%= product._id %>"><%= product.name %></a>
+                                    <a href="/product/<%= product._id %>"><%= tProduct(product, 'name') %></a>
                                 </div>
                                 <div class="premium-card-desc">
-                                    <%= product.description ? product.description.substring(0,30) + '...' : 'Pırlanta Şıklığı' %>
+                                    <%= tProduct(product, 'description') ? tProduct(product, 'description').substring(0,30) + '...' : 'Pırlanta Şıklığı' %>
                                 </div>
                                 <div class="premium-card-price-wrap">
                                     <span class="premium-card-price">₺ <%= product.price.toLocaleString('tr-TR') %></span>

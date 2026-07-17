@@ -1,11 +1,11 @@
 <!doctype html>
-<html class="no-js" lang="tr">
+<html class="no-js" lang="<%= locals.currentLang || 'tr' %>">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Alina Help</title>
-    <meta name="description" content="Alina Help">
+    <title><%= t('site_name', 'Alina Help') %></title>
+    <meta name="description" content="<%= t('description', 'A simple help platform prepared for real support and donations.') %>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="icon" type="image/x-icon" href="/assets/img/favicon.ico">

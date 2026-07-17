@@ -8,12 +8,12 @@
                         <div class="single-footer-caption mb-30">
                             <div class="footer-logo mb-35">
                                 <a href="/" style="display: inline-flex; align-items: center; text-decoration: none; color: #fff; font-size: 24px; font-weight: 700; letter-spacing: 0.08em;">
-                                    Alina Help
+                                    <%= t('site_name','Alina Help') %>
                                 </a>
                             </div>
                             <div class="footer-tittle">
                                 <div class="footer-pera">
-                                    <p>Gerçek destek ve bağış amacıyla hazırlanmış sade bir yardım platformu.</p>
+                                    <p><%= t('description','Gerçek destek ve bağış amacıyla hazırlanmış sade bir yardım platformu.') %></p>
                                 </div>
                             </div>
                             <!-- social -->
@@ -28,11 +28,11 @@
                 <div class="col-xl-2 col-lg-2 col-md-4 col-sm-4">
                     <div class="single-footer-caption mb-50">
                         <div class="footer-tittle">
-                            <h4>Hızlı Linkler</h4>
+                            <h4><%= t('quick_links','Hızlı Linkler') %></h4>
                             <ul>
-                                <li><a href="/">Ana Sayfa</a></li>
-                                <li><a href="/urunler">Ürünler</a></li>
-                                <li><a href="https://www.instagram.com/spasti_jizn_aline?igsh=OThudjBwZHZiMzkx" target="_blank">Instagram</a></li>
+                                <li><a href="/"><%= t('home','Ana Sayfa') %></a></li>
+                                <li><a href="/urunler"><%= t('products','Ürünler') %></a></li>
+                                <li><a href="https://www.instagram.com/spasti_jizn_aline?igsh=OThudjBwZHZiMzkx" target="_blank"><%= t('instagram','Instagram') %></a></li>
                             </ul>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                 <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6">
                     <div class="single-footer-caption mb-50">
                         <div class="footer-tittle">
-                            <h4>İletişim</h4>
+                            <h4><%= t('contact','İletişim') %></h4>
                             <ul>
                                 <li><a href="https://www.instagram.com/spasti_jizn_aline?igsh=OThudjBwZHZiMzkx" target="_blank">@spasti_jizn_aline</a></li>
                             </ul>
@@ -59,7 +59,7 @@
                         <div class="footer-copy-right text-center">
                             <p>
                                 Copyright &copy;
-                                <script>document.write(new Date().getFullYear());</script> Tüm hakları saklıdır.
+                                <script>document.write(new Date().getFullYear());</script> <%= t('copyright','Tüm hakları saklıdır.') %>
                             </p>
                         </div>
                     </div>
@@ -111,14 +111,13 @@
     <div class="fav-auth-modal-content">
         <button class="fav-auth-close-btn" onclick="closeFavAuthModal()">&times;</button>
         <div class="fav-auth-modal-logo" style="margin-bottom: 10px; color: #111827; font-size: 22px; font-weight: 700; letter-spacing: 0.08em;">
-            Alina Help
+            <%= t('site_name','Alina Help') %>
         </div>
-        <h3>Favorilere Ekle</h3>
-        <p>Seçtiğiniz bu benzersiz mücevheri favorilerinize eklemek ve sepetinize daha hızlı ulaşmak için lütfen giriş
-            yapın veya kayıt olun.</p>
+        <h3><%= t('add_to_favorites_title','Favorilere Ekle') %></h3>
+        <p><%= t('add_to_favorites_desc','Seçtiğiniz bu benzersiz mücevheri favorilerinize eklemek ve sepetinize daha hızlı ulaşmak için lütfen giriş yapın veya kayıt olun.') %></p>
         <div class="fav-auth-actions">
-            <a href="/auth/login" class="fav-auth-btn fav-auth-btn-primary">Giriş Yap</a>
-            <a href="/auth/register" class="fav-auth-btn fav-auth-btn-secondary">Üye Ol</a>
+            <a href="/auth/login" class="fav-auth-btn fav-auth-btn-primary"><%= t('login','Giriş Yap') %></a>
+            <a href="/auth/register" class="fav-auth-btn fav-auth-btn-secondary"><%= t('register','Üye Ol') %></a>
         </div>
     </div>
 </div>

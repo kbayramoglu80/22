@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hero-cap text-center">
-                            <h2><%= product.name %></h2>
+                            <h2><%= tProduct(product, 'name') %></h2>
                         </div>
                     </div>
                 </div>
@@ -20,13 +20,13 @@
             <div class="row">
                 <div class="col-lg-6 mb-4">
                     <div style="border-radius: 22px; overflow: hidden; background: #fafafa; padding: 20px;">
-                        <img src="<%= product.imageUrl %>" alt="<%= product.name %>" style="width: 100%; height: auto; object-fit: contain;">
+                        <img src="<%= product.imageUrl %>" alt="<%= tProduct(product, 'name') %>" style="width: 100%; height: auto; object-fit: contain;">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div style="background: #fff; border: 1px solid #eee; border-radius: 22px; padding: 35px;">
-                        <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 20px;"><%= product.name %></h2>
-                        <p style="font-size: 1rem; color: #555; line-height: 1.8; margin-bottom: 30px;"><%= product.description || 'Bu ürün için henüz açıklama eklenmemiş.' %></p>
+                        <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 20px;"><%= tProduct(product, 'name') %></h2>
+                        <p style="font-size: 1rem; color: #555; line-height: 1.8; margin-bottom: 30px;"><%= tProduct(product, 'description') || t('no_description','Bu ürün için henüz açıklama eklenmemiş.') %></p>
                         <div style="display: flex; align-items: baseline; gap: 12px; margin-bottom: 30px;">
                             <span style="font-size: 2rem; font-weight: 800; color: #111;">₺ <%= product.price.toLocaleString('tr-TR') %></span>
                             <span style="font-size: 0.95rem; color: #777;">Ürün adı, görseli ve açıklamasıyla tek sayfa.</span>

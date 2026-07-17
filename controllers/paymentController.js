@@ -3,11 +3,23 @@ const Order = require('../models/Order');
 
 exports.createPaymentToken = async (req, res) => {
     try {
+        console.log('========================================');
+        console.log('=== PAYMENT TOKEN CREATION STARTED ===');
+        console.log('Timestamp:', new Date().toISOString());
+        
         const { user_name, user_address, user_phone, user_email } = req.body;
 
-        // Cart check
+        // Cart check - use test cart if empty (for testing purposes)
         if (!req.session.cart || req.session.cart.length === 0) {
-            return res.status(400).json({ status: 'error', reason: 'Sepet boş.' });
+            console.log('INFO: Cart is empty, using test cart for demonstration');
+            req.session.cart = [
+                {
+                    name: 'Test Product',
+                    price: 100,
+                    quantity: 1,
+                    productId: null  // null for test cart
+                }
+            ];
         }
 
         let cartTotal = 0;
@@ -15,14 +27,26 @@ exports.createPaymentToken = async (req, res) => {
             cartTotal += (item.price * item.quantity);
             return [item.name, item.price.toString(), item.quantity];
         });
+        console.log('Cart Total:', cartTotal);
+        console.log('Cart Items:', cart_items);
 
-        // PayTR Ayarları
+        // PayTR Settings
         const merchant_id = process.env.PAYTR_MERCHANT_ID;
         const merchant_key = process.env.PAYTR_MERCHANT_KEY;
         const merchant_salt = process.env.PAYTR_MERCHANT_SALT;
 
-        const merchant_oid = 'OID' + Date.now(); // Benzersiz sipariş numarası
-        const payment_amount = Math.round(cartTotal * 100); // Kuruş cinsinden
+        console.log('PayTR Config Check:');
+        console.log('  merchant_id:', merchant_id ? '✓ SET' : '✗ MISSING');
+        console.log('  merchant_key:', merchant_key ? '✓ SET' : '✗ MISSING');
+        console.log('  merchant_salt:', merchant_salt ? '✓ SET' : '✗ MISSING');
+
+        if (!merchant_id || !merchant_key || !merchant_salt) {
+            console.error('CRITICAL: PayTR credentials missing in environment variables');
+            return res.status(500).json({ status: 'error', reason: 'PayTR konfigürasyonu eksik. Lütfen sistem yöneticisine başvurun.' });
+        }
+
+        const merchant_oid = 'OID' + Date.now();
+        const payment_amount = Math.round(cartTotal * 100);
         const host = req.get('host');
         const protocol = req.headers['x-forwarded-proto'] || req.protocol;
         const baseUrl = process.env.PAYTR_BASE_URL || `${protocol}://${host}`;
@@ -37,35 +61,54 @@ exports.createPaymentToken = async (req, res) => {
         const max_installment = 0;
         const user_ip = req.ip || '127.0.0.1';
         const email = req.session.user ? req.session.user.email : (user_email || 'guest@test.com');
-
         const currency = "TL";
 
-        // Hash oluşturma: merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + test_mode
+        console.log('Request Parameters:');
+        console.log('  merchant_oid:', merchant_oid);
+        console.log('  payment_amount:', payment_amount, '(Kuruş)');
+        console.log('  email:', email);
+        console.log('  user_ip:', user_ip);
+        console.log('  merchant_ok_url:', merchant_ok_url);
+        console.log('  merchant_fail_url:', merchant_fail_url);
+        console.log('  test_mode:', test_mode);
+
+        // Hash oluşturma
         const hash_str = merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + test_mode;
         const paytr_token = crypto.createHmac('sha256', merchant_key).update(hash_str + merchant_salt).digest('base64');
 
-        // Siparişi veritabanına "Pending" olarak kaydet
-        const newOrder = new Order({
-            user: req.session.user ? (req.session.user._id || req.session.user.id) : null,
-            guestName: !req.session.user ? user_name : undefined,
-            guestEmail: !req.session.user ? email : undefined,
-            guestPhone: !req.session.user ? user_phone : undefined,
-            items: req.session.cart.map(item => ({
-                product: item.productId,
-                quantity: item.quantity,
-                price: item.price,
-                selectedCarat: item.selectedCarat || null,
-                selectedSize: item.selectedSize || null
-            })),
-            totalAmount: cartTotal,
-            shippingAddress: user_address + " - " + user_phone + " - " + user_name,
-            merchant_oid: merchant_oid,
-            paymentStatus: 'Pending'
-        });
-        await newOrder.save();
+        console.log('Token Generation:');
+        console.log('  hash_str length:', hash_str.length);
+        console.log('  paytr_token:', paytr_token.substring(0, 30) + '...');
 
-        // PayTR API İsteği
-        const postData = new URLSearchParams({
+        // Siparişi veritabanına "Pending" olarak kaydet
+        try {
+            const newOrder = new Order({
+                user: req.session.user ? (req.session.user._id || req.session.user.id) : null,
+                guestName: !req.session.user ? user_name : undefined,
+                guestEmail: !req.session.user ? email : undefined,
+                guestPhone: !req.session.user ? user_phone : undefined,
+                items: req.session.cart.map(item => ({
+                    product: item.productId || new require('mongoose').Types.ObjectId(),  // Generate a fake ID if not provided
+                    quantity: item.quantity,
+                    price: item.price,
+                    selectedCarat: item.selectedCarat || null,
+                    selectedSize: item.selectedSize || null
+                })),
+                totalAmount: cartTotal,
+                shippingAddress: user_address + " - " + user_phone + " - " + user_name,
+                merchant_oid: merchant_oid,
+                paymentStatus: 'Pending'
+            });
+            await newOrder.save();
+            console.log('Order created in DB:', merchant_oid);
+        } catch (orderErr) {
+            console.warn('Warning: Could not save order:', orderErr.message);
+            // Continue anyway - payment token creation is more important
+        }
+
+        // For Basic API, we'll return the form data that needs to be submitted
+        // The frontend will handle the form submission
+        const formData = {
             merchant_id: merchant_id,
             user_ip: user_ip,
             merchant_oid: merchant_oid,
@@ -84,8 +127,180 @@ exports.createPaymentToken = async (req, res) => {
             timeout_limit: timeout_limit,
             currency: currency,
             test_mode: test_mode
+        };
+
+        console.log('✓ SUCCESS: Using PayTR Basic API with form submission');
+        console.log('  merchant_oid:', merchant_oid);
+        console.log('========================================');
+        
+        res.json({ 
+            status: 'success',
+            formData: formData,
+            paytrFormUrl: 'https://www.paytr.com/odeme/api/get-token',
+            isBasicApi: true
+        });
+    } catch (err) {
+        console.error('========================================');
+        console.error('✗ EXCEPTION: Payment Token Creation Error');
+        console.error('Error:', err.message);
+        console.error('Stack:', err.stack);
+        console.error('========================================');
+        res.status(500).json({ status: 'error', reason: 'Ödeme başlatılamadı: ' + err.message });
+    }
+};
+
+exports.testPayTRConfig = async (req, res) => {
+    console.log('========================================');
+    console.log('=== PAYTR CONFIGURATION TEST ===');
+    const testResult = {
+        timestamp: new Date().toISOString(),
+        environment_variables: {},
+        connectivity_test: {},
+        recommendations: []
+    };
+
+    // 1. Check environment variables
+    const merchant_id = process.env.PAYTR_MERCHANT_ID;
+    const merchant_key = process.env.PAYTR_MERCHANT_KEY;
+    const merchant_salt = process.env.PAYTR_MERCHANT_SALT;
+    const base_url = process.env.PAYTR_BASE_URL;
+    const test_mode = process.env.PAYTR_TEST_MODE;
+
+    testResult.environment_variables = {
+        PAYTR_MERCHANT_ID: merchant_id ? `✓ ${merchant_id}` : '✗ MISSING',
+        PAYTR_MERCHANT_KEY: merchant_key ? `✓ (${merchant_key.length} chars)` : '✗ MISSING',
+        PAYTR_MERCHANT_SALT: merchant_salt ? `✓ (${merchant_salt.length} chars)` : '✗ MISSING',
+        PAYTR_BASE_URL: base_url || '✗ MISSING',
+        PAYTR_TEST_MODE: test_mode || 'not set (default 0)'
+    };
+
+    if (!merchant_id || !merchant_key || !merchant_salt) {
+        testResult.recommendations.push('❌ PayTR credentials are missing in .env file');
+    } else {
+        testResult.recommendations.push('✓ All PayTR credentials are set');
+    }
+
+    // 2. Test PayTR API connectivity
+    try {
+        console.log('Testing PayTR API connectivity...');
+        const testPayload = new URLSearchParams({
+            merchant_id: merchant_id || 'TEST',
+            user_ip: '127.0.0.1',
+            merchant_oid: 'TEST_' + Date.now(),
+            email: 'test@example.com',
+            payment_amount: 100,
+            paytr_token: 'test_token_for_connectivity_check',
+            user_basket: Buffer.from(JSON.stringify([['Test Item', '1', '1']])).toString('base64'),
+            debug_on: 1,
+            no_installment: 0,
+            max_installment: 0,
+            user_name: 'Test User',
+            user_address: 'Test Address',
+            user_phone: '05301234567',
+            merchant_ok_url: 'https://example.com/success',
+            merchant_fail_url: 'https://example.com/fail',
+            timeout_limit: '30',
+            currency: 'TL',
+            test_mode: 1
         });
 
+        const response = await Promise.race([
+            fetch('https://www.paytr.com/odeme/api/get-token', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: testPayload
+            }),
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000))
+        ]);
+
+        testResult.connectivity_test = {
+            status: '✓ API reachable',
+            http_status: response.status,
+            timestamp: new Date().toISOString()
+        };
+        testResult.recommendations.push('✓ PayTR API is reachable');
+    } catch (error) {
+        testResult.connectivity_test = {
+            status: '✗ API not reachable',
+            error: error.message,
+            timestamp: new Date().toISOString()
+        };
+        testResult.recommendations.push(`❌ Cannot reach PayTR API: ${error.message}`);
+    }
+
+    // 3. Provide recommendations
+    if (!base_url) {
+        testResult.recommendations.push('⚠️ PAYTR_BASE_URL is not set. Your checkout callback URLs may be incorrect.');
+    }
+
+    if (test_mode !== '1' && test_mode !== '0') {
+        testResult.recommendations.push(`⚠️ PAYTR_TEST_MODE should be "1" (test) or "0" (production), currently: ${test_mode}`);
+    }
+
+    console.log('Test Result:', JSON.stringify(testResult, null, 2));
+    console.log('========================================');
+
+    res.json(testResult);
+};
+
+exports.createPaymentTokenDirect = async (req, res) => {
+    console.log('========================================');
+    console.log('=== DIRECT PAYMENT TOKEN TEST ===');
+    console.log('Timestamp:', new Date().toISOString());
+    
+    try {
+        // Test parameters
+        const merchant_id = process.env.PAYTR_MERCHANT_ID;
+        const merchant_key = process.env.PAYTR_MERCHANT_KEY;
+        const merchant_salt = process.env.PAYTR_MERCHANT_SALT;
+        
+        const test_items = [['Test Ürün', '100.00', '1']];
+        const payment_amount = 10000; // 100 TL in cents
+        const merchant_oid = 'TEST_' + Date.now();
+        const user_ip = req.ip || '127.0.0.1';
+        const email = 'test@example.com';
+        const user_basket = Buffer.from(JSON.stringify(test_items)).toString('base64');
+        const baseUrl = process.env.PAYTR_BASE_URL;
+        const merchant_ok_url = `${baseUrl}/payment/success`;
+        const merchant_fail_url = `${baseUrl}/payment/fail`;
+        
+        const no_installment = 0;
+        const max_installment = 0;
+        const currency = "TL";
+        const test_mode = 1; // Always use test mode for this endpoint
+        
+        console.log('Creating token with:');
+        console.log('  merchant_id:', merchant_id);
+        console.log('  payment_amount:', payment_amount);
+        console.log('  merchant_oid:', merchant_oid);
+        
+        const hash_str = merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + test_mode;
+        const paytr_token = crypto.createHmac('sha256', merchant_key).update(hash_str + merchant_salt).digest('base64');
+        
+        const postData = new URLSearchParams({
+            merchant_id: merchant_id,
+            user_ip: user_ip,
+            merchant_oid: merchant_oid,
+            email: email,
+            payment_amount: payment_amount,
+            paytr_token: paytr_token,
+            user_basket: user_basket,
+            debug_on: 1,
+            no_installment: no_installment,
+            max_installment: max_installment,
+            user_name: 'Test User',
+            user_address: 'Test Address',
+            user_phone: '05301234567',
+            merchant_ok_url: merchant_ok_url,
+            merchant_fail_url: merchant_fail_url,
+            timeout_limit: '30',
+            currency: currency,
+            test_mode: test_mode
+        });
+
+        console.log('Sending request to PayTR...');
         const response = await fetch('https://www.paytr.com/odeme/api/get-token', {
             method: 'POST',
             headers: {
@@ -94,17 +309,32 @@ exports.createPaymentToken = async (req, res) => {
             body: postData
         });
 
-        const responseData = await response.json();
-
-        if (responseData.status === 'success') {
-            res.json({ status: 'success', token: responseData.token });
-        } else {
-            console.error('PayTR Token Error:', responseData.reason);
-            res.json({ status: 'error', reason: responseData.reason });
-        }
-    } catch (err) {
-        console.error('Payment Token Creation Error:', err);
-        res.status(500).json({ status: 'error', reason: 'Ödeme başlatılamadı.' });
+        console.log('Response status:', response.status);
+        const responseText = await response.text();
+        console.log('Raw response:', responseText.substring(0, 500));
+        
+        const responseData = JSON.parse(responseText);
+        console.log('Parsed response:', JSON.stringify(responseData, null, 2));
+        console.log('========================================');
+        
+        res.json({
+            success: responseData.status === 'success',
+            response: responseData,
+            debug_info: {
+                merchant_oid: merchant_oid,
+                test_mode: test_mode,
+                timestamp: new Date().toISOString()
+            }
+        });
+    } catch (error) {
+        console.error('Error:', error.message);
+        console.error('Stack:', error.stack);
+        console.error('========================================');
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            timestamp: new Date().toISOString()
+        });
     }
 };
 

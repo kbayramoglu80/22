@@ -23,11 +23,7 @@
                 <div class="col-lg-6">
                     <div class="order_box" id="address-section">
                         <h2>Teslimat Bilgileri</h2>
-                        <% if (!user) { %>
-                            <p class="mb-3" style="font-size: 0.95rem; color: #666;">
-                                Zaten üye misiniz? <a href="/auth/login?redirect=/checkout" style="color: #bca374; font-weight: 600; text-decoration: underline; transition: color 0.2s;">Buradan Giriş Yapın</a>
-                            </p>
-                        <% } %>
+                        <!-- Login option removed -->
                         <form id="payment-form">
                             <div class="form-group">
                                 <label>Ad Soyad</label>
@@ -116,16 +112,39 @@ async function startPaytrPayment() {
 
         const data = await response.json();
 
-        if (data.status === 'success' && data.token) {
-            // Hide left section, show iframe
-            document.getElementById('address-section').classList.add('d-none');
-            const iframeSection = document.getElementById('paytr-section');
-            iframeSection.style.display = 'block';
+        if (data.status === 'success') {
+            if (data.isBasicApi && data.formData) {
+                console.log('Using PayTR Basic API - Submitting form to PayTR');
+                
+                // Create a hidden form and submit it to PayTR
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = data.paytrFormUrl;
+                form.style.display = 'none';
 
-            const iframe = document.getElementById('paytriframe');
-            iframe.src = "https://www.paytr.com/odeme/guvenli/" + data.token;
+                // Add all form fields
+                for (const [key, value] of Object.entries(data.formData)) {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = value;
+                    form.appendChild(input);
+                }
 
-            iFrameResize({}, '#paytriframe');
+                document.body.appendChild(form);
+                form.submit();
+            } else if (data.token) {
+                console.log('Using PayTR Pro API - Showing iframe');
+                // For Pro API, use iframe
+                document.getElementById('address-section').classList.add('d-none');
+                const iframeSection = document.getElementById('paytr-section');
+                iframeSection.style.display = 'block';
+
+                const iframe = document.getElementById('paytriframe');
+                iframe.src = "https://www.paytr.com/odeme/guvenli/" + data.token;
+
+                iFrameResize({}, '#paytriframe');
+            }
         } else {
             alert('Ödeme başlatılamadı: ' + (data.reason || 'Bilinmeyen Hata'));
             btn.disabled = false;

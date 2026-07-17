@@ -184,12 +184,28 @@
                             <!-- Sekme 1: Temel Bilgiler -->
                             <div class="tab-pane fade show active" id="addTab1">
                                 <div class="form-group">
-                                    <label>Ürün Adı</label>
+                                    <label>Ürün Adı (TR)</label>
                                     <input type="text" name="name" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Açıklama</label>
+                                    <label>Ürün Adı (EN)</label>
+                                    <input type="text" name="name_en" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Ürün Adı (RU)</label>
+                                    <input type="text" name="name_ru" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Açıklama (TR)</label>
                                     <textarea name="description" class="form-control" rows="3" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Açıklama (EN)</label>
+                                    <textarea name="description_en" class="form-control" rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Açıklama (RU)</label>
+                                    <textarea name="description_ru" class="form-control" rows="3"></textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -446,13 +462,31 @@
                             <!-- Sekme 1: Temel Bilgiler -->
                             <div class="tab-pane fade show active" id="editTab1">
                                 <div class="form-group">
-                                    <label>Ürün Adı</label>
+                                    <label>Ürün Adı (TR)</label>
                                     <input type="text" id="editProductName" name="name" class="form-control" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>Açıklama</label>
+                                    <label>Ürün Adı (EN)</label>
+                                    <input type="text" id="editProductNameEn" name="name_en" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Ürün Adı (RU)</label>
+                                    <input type="text" id="editProductNameRu" name="name_ru" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>Açıklama (TR)</label>
                                     <textarea id="editProductDescription" name="description" class="form-control"
                                         rows="3" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Açıklama (EN)</label>
+                                    <textarea id="editProductDescriptionEn" name="description_en" class="form-control"
+                                        rows="3"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Açıklama (RU)</label>
+                                    <textarea id="editProductDescriptionRu" name="description_ru" class="form-control"
+                                        rows="3"></textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -846,7 +880,11 @@
         function populateEditProduct(product) {
             document.getElementById('editProductForm').action = '/admin/products/edit/' + product._id;
             document.getElementById('editProductName').value = product.name;
+            document.getElementById('editProductNameEn').value = product.name_en || '';
+            document.getElementById('editProductNameRu').value = product.name_ru || '';
             document.getElementById('editProductDescription').value = product.description;
+            document.getElementById('editProductDescriptionEn').value = product.description_en || '';
+            document.getElementById('editProductDescriptionRu').value = product.description_ru || '';
             document.getElementById('editProductPrice').value = product.price;
             document.getElementById('editProductStock').value = product.stock;
 

@@ -190,12 +190,7 @@
                                             <%= tProduct(product, 'description') ? tProduct(product, 'description').substring(0,30) + '...' : t('default_product_desc','Pırlanta Şıklığı') %>
                                         </div>
                                         <div class="premium-card-price-wrap">
-                                            <span class="premium-card-price">₺ <%= product.price.toLocaleString('tr-TR')
-                                                    %></span>
-                                            <% if (product.price> 1000) { %>
-                                                <span class="premium-card-old-price">₺ <%= Math.round(product.price *
-                                                        1.2).toLocaleString('tr-TR') %></span>
-                                                <% } %>
+                                            <span class="premium-card-price">₺ <%= product.price.toLocaleString('tr-TR') %></span>
                                         </div>
                                         <div class="card-actions">
                                             <a href="/product/<%= product._id %>" class="btn-premium-secondary"

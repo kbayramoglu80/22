@@ -156,8 +156,8 @@
                     <div class="row justify-content-center mb-40">
                         <div class="col-xl-7 col-lg-8 col-md-10 text-center">
                             <div class="section-tittle mb-20">
-                                <h2>Alina İçin Destek</h2>
-                                <p><%= t('new_arrival_desc','Alina için destek verin, Alina\'nın tedavi sürecine katkı sağlayın.') %></p>
+                                <h2><%= t('new_arrival_title','Alina İçin Destek') %></h2>
+                                <p><%= t('new_arrival_desc','Support Alina with your donation to help her treatment journey.') %></p>
                             </div>
                         </div>
                     </div>
@@ -199,11 +199,11 @@
                                         </div>
                                         <div class="card-actions">
                                             <a href="/product/<%= product._id %>" class="btn-premium-secondary"
-                                                style="padding: 10px; font-size: 10px;"><%= t('btn_view','İncele') %></a>
+                                                style="padding: 10px; font-size: 10px;"><%= t('btn_view','View') %></a>
                                             <button
                                                 onclick="openHomeAddToCartModal('<%= product._id %>', '<%= tProduct(product, 'name') %>', '<%= product.price %>', '<%= product.imageUrl %>', '<%= product.paytrLink || '' %>')"
                                                 class="btn-premium-primary"
-                                                style="padding: 10px; font-size: 10px; flex: 1;"><%= t('btn_buy_now','Hemen Satın Al') %></button>
+                                                style="padding: 10px; font-size: 10px; flex: 1;"><%= t('btn_buy_now','Buy Now') %></button>
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                                             <h2>
                                                 <%= sec.title %>
                                             </h2>
-                                            <p>Seçkin ürünlerden oluşan bu bölümde stilinizi tamamlayın.</p>
+                                            <p>Browse this curated section to complete your style.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -282,7 +282,7 @@
                                                     <button
                                                         onclick="openHomeAddToCartModal('<%= product._id %>', '<%= tProduct(product, 'name') %>', '<%= product.price %>', '<%= product.imageUrl %>', '<%= product.paytrLink || '' %>', '<%= product.paytrLink || '' %>')"
                                                         class="btn-premium-primary"
-                                                        style="padding: 10px; font-size: 10px; flex: 1;">Hemen Satın Al</button>
+                                                        style="padding: 10px; font-size: 10px; flex: 1;"><%= t('btn_buy_now','Buy Now') %></button>
                                                 </div>
                                             </div>
                                         </div>
@@ -398,40 +398,9 @@
                                             updateVisibility();
                                         });
 
-                                        // Ana sayfa yüzük ölçü tablosu
-                                        const ringSizeChartHome = [
-                                            { size: 7, diameter: 14.96 },
-                                            { size: 8, diameter: 15.28 },
-                                            { size: 9, diameter: 15.61 },
-                                            { size: 10, diameter: 15.92 },
-                                            { size: 11, diameter: 16.24 },
-                                            { size: 12, diameter: 16.56 },
-                                            { size: 13, diameter: 16.88 },
-                                            { size: 14, diameter: 17.20 },
-                                            { size: 15, diameter: 17.52 },
-                                            { size: 16, diameter: 17.83 },
-                                            { size: 17, diameter: 18.15 },
-                                            { size: 18, diameter: 18.47 },
-                                            { size: 19, diameter: 18.79 },
-                                            { size: 20, diameter: 19.11 },
-                                            { size: 21, diameter: 19.43 },
-                                            { size: 22, diameter: 19.75 },
-                                            { size: 23, diameter: 20.06 },
-                                            { size: 24, diameter: 20.38 },
-                                            { size: 25, diameter: 20.70 },
-                                            { size: 26, diameter: 21.02 },
-                                            { size: 27, diameter: 21.34 },
-                                            { size: 28, diameter: 21.66 },
-                                            { size: 29, diameter: 21.97 },
-                                            { size: 30, diameter: 22.29 }
-                                        ];
-
                                         let currentProduct = null;
-                                        let mcurrentStepHome = 1;
-                                        let mpxPerMmHome = 7.6481;
-                                        let mcalibrationCirclePixelsHome = 200;
 
-                                        // Ana sayfa sepete ekleme modalı
+                                        // Home add-to-cart modal
                                         function openHomeAddToCartModal(productId, productName, productPrice, productImage, paytrLink = '') {
                                             currentProduct = {
                                                 _id: productId,
@@ -451,8 +420,8 @@
                                                 <p style="font-size: 20px; font-weight: 700; color: #ff2020; margin-bottom: 20px;">₺${parseFloat(productPrice).toLocaleString('tr-TR')}</p>
                                                 
                                                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                                                    <button onclick="closeAddToCartModal()" class="btn-premium-secondary" style="flex: 1; padding: 12px 20px; font-size: 14px;">İptal</button>
-                                                    <button onclick="addToCartFromHome()" class="btn-premium-primary" style="flex: 1; padding: 12px 20px; font-size: 14px;">Hemen Satın Al</button>
+                                                    <button onclick="closeAddToCartModal()" class="btn-premium-secondary" style="flex: 1; padding: 12px 20px; font-size: 14px;">Cancel</button>
+                                                    <button onclick="addToCartFromHome()" class="btn-premium-primary" style="flex: 1; padding: 12px 20px; font-size: 14px;">Buy Now</button>
                                                 </div>
                                             `;
 
@@ -512,7 +481,7 @@
         </main>
 
 
-        <!-- Ürün Ekleme Modalı -->
+        <!-- Product Add-to-Cart Modal -->
         <div id="addToCartModal" class="ring-size-modal"
             style="display:none; position:fixed; z-index:1100; left:0; top:0; width:100%; height:100%; overflow:hidden; background-color:rgba(0,0,0,0.6); backdrop-filter: blur(8px); justify-content:center; align-items:center;">
             <div class="ring-size-modal-content"
@@ -521,212 +490,8 @@
                     style="color:#aaa; position:absolute; right:20px; top:15px; font-size:28px; font-weight:bold; cursor:pointer; transition:color 0.2s; z-index: 10;">&times;</span>
 
                 <div id="modal-product-content" style="text-align: center;">
-                    <!-- Ürün içeriği burada dinamik olarak doldurulacak -->
+                    <!-- Product content is dynamically filled here -->
                 </div>
-            </div>
-        </div>
-
-
-                    </div>
-                    <h3
-                        style="font-size: 18px; font-weight: 700; color: #140C40; margin-bottom: 10px; font-family: 'Montserrat', sans-serif;">
-                        Ölçünüzü Bulmak Çok Kolay!</h3>
-                    <p
-                        style="font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 20px; max-width: 450px; margin-left: auto; margin-right: auto;">
-                        Yüzük ölçünüzü tam olarak tespit etmek için elinizde **fiziksel bir 1 TL madeni para** olması
-                        yeterlidir. Ekranınızı 1 TL ile kalibre ederek yüzüklerinizin iç çapını milimetrik hassasiyetle
-                        ölçeceğiz.
-                    </p>
-                    <div
-                        style="background: #fdfaf4; border-radius: 12px; padding: 12px; border: 1px solid #f6ecdb; max-width: 420px; margin: 0 auto 20px; text-align: left; font-size: 12px; color: #8c7340; line-height: 1.4;">
-                        <i class="fas fa-info-circle"
-                            style="margin-right: 6px; font-size: 14px; vertical-align: middle;"></i> <strong>Nasıl
-                            Çalışır?</strong> Her ekranın piksel yoğunluğu farklıdır. 1 TL madeni paranın sabit olan
-                        <strong>26.15 mm</strong> çapını ekranda eşleyerek cihazınızın piksel ölçeğini tanımlarız.
-                    </div>
-                    <button type="button" class="btn-premium-primary" onclick="goToModalStepHome(2)"
-                        style="max-width: 220px; margin: 0 auto; display: block; border-radius: 30px; padding: 12px 20px; font-size: 12px;">Hemen
-                        Başla</button>
-                </div>
-
-                <!-- Step Content 2: Calibration -->
-                <div id="mstep-content-h2" class="mstep-content" style="display: none; text-align: center;">
-                    <h3
-                        style="font-size: 16px; font-weight: 700; color: #140C40; margin-bottom: 8px; font-family: 'Montserrat', sans-serif;">
-                        Ekran Kalibrasyonu</h3>
-                    <p
-                        style="font-size: 12px; color: #666; line-height: 1.4; margin-bottom: 20px; max-width: 450px; margin-left: auto; margin-right: auto;">
-                        Ekranın üzerine fiziksel bir **1 TL** yerleştirin. Aşağıdaki kaydırıcıyı kullanarak ekrandaki
-                        daireyi **1 TL madeni para ile birebir aynı boyuta** getirin.
-                    </p>
-
-                    <!-- Calibration Interactive Area -->
-                    <div
-                        style="height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative;">
-                        <div id="mcalibration-circle-h"
-                            style="width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(197, 160, 89, 0.15) 0%, rgba(197, 160, 89, 0.45) 100%); border: 3px dashed #c5a059; transition: width 0.05s ease, height 0.05s ease; box-shadow: 0 10px 25px rgba(197,160,89,0.15); display: flex; align-items: center; justify-content: center;">
-                            <div
-                                style="font-size: 10px; font-weight: 700; color: #8c7340; text-shadow: 0 1px 1px #fff; text-transform: uppercase; letter-spacing: 0.5px;">
-                                1 TL Koyun</div>
-                        </div>
-                    </div>
-
-                    <!-- Slider & Fine Tuning Buttons -->
-                    <div style="max-width: 380px; margin: 0 auto 20px;">
-                        <div
-                            style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px;">
-                            <button type="button" class="btn-tune" onclick="tuneModalCalibrationHome(-1)"
-                                style="width:32px; height:32px; border-radius:50%; border:1px solid #ccc; background:#fff; font-size:16px; font-weight:bold; color:#555; cursor:pointer; outline:none; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);">-</button>
-                            <input type="range" id="mcalibration-slider-h" min="150" max="300" value="200"
-                                oninput="resizeModalCalibrationCircleHome(this.value)"
-                                style="flex:1; height:6px; border-radius:5px; background:#e4cc95; outline:none; -webkit-appearance:none; cursor:pointer;">
-                            <button type="button" class="btn-tune" onclick="tuneModalCalibrationHome(1)"
-                                style="width:32px; height:32px; border-radius:50%; border:1px solid #ccc; background:#fff; font-size:16px; font-weight:bold; color:#555; cursor:pointer; outline:none; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);">+</button>
-                        </div>
-                        <span id="mcal-pixels-label-h"
-                            style="font-size: 11px; color: #999; font-family: monospace;">Genişlik: 200px</span>
-                    </div>
-
-                    <div style="display: flex; gap: 10px; max-width: 360px; margin: 0 auto;">
-                        <button type="button" class="btn-premium-secondary" onclick="goToModalStepHome(1)"
-                            style="border-radius:30px; padding: 10px 20px; font-size: 12px; height: auto;">Geri
-                            Git</button>
-                        <button type="button" class="btn-premium-primary"
-                            onclick="saveModalCalibrationAndContinueHome()"
-                            style="border-radius:30px; padding: 10px 20px; font-size: 12px; height: auto;">Kalibrasyonu
-                            Tamamla</button>
-                    </div>
-                </div>
-
-                <!-- Step Content 3: Measurement -->
-                <div id="mstep-content-h3" class="mstep-content" style="display: none; text-align: center;">
-                    <h3
-                        style="font-size: 16px; font-weight: 700; color: #140C40; margin-bottom: 10px; font-family: 'Montserrat', sans-serif;">
-                        Yüzük Ölçümü Yapın</h3>
-
-                    <!-- Measurement Mode Tabs -->
-                    <div style="display: flex; justify-content: center; gap: 8px; margin-bottom: 20px;">
-                        <button type="button" id="mtab-btn-ring-h" class="measure-tab-btn active"
-                            onclick="switchModalMeasureModeHome('ring')"
-                            style="padding:6px 14px; font-size:11px; font-weight:700; border-radius:20px; border:1px solid #c5a059; background:#c5a059; color:#fff; cursor:pointer; outline:none; transition: all 0.3s;">Mevcut
-                            Yüzük ile Ölç</button>
-                        <button type="button" id="mtab-btn-circles-h" class="measure-tab-btn"
-                            onclick="switchModalMeasureModeHome('circles')"
-                            style="padding:6px 14px; font-size:11px; font-weight:700; border-radius:20px; border:1px solid #ccc; background:#fff; color:#555; cursor:pointer; outline:none; transition: all 0.3s;">Ölçü
-                            Seçip Karşılaştır</button>
-                    </div>
-
-                    <!-- Mode A: Measure Existing Ring -->
-                    <div id="mmode-content-ring-h" style="display: block;">
-                        <p
-                            style="font-size: 12px; color: #666; line-height: 1.4; margin-bottom: 15px; max-width: 450px; margin-left: auto; margin-right: auto;">
-                            Yüzüğünüzü dairenin üzerine koyun. Daireyi yüzüğünüzün **iç metal kenarlarıyla** birebir
-                            hizalayın.
-                        </p>
-
-                        <!-- Ring Interactive Circle Area -->
-                        <div
-                            style="height: 150px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative;">
-                            <div id="mring-measure-circle-h"
-                                style="width: 140px; height: 140px; border-radius: 50%; border: 2.5px solid #140C40; background: transparent; transition: width 0.05s ease, height 0.05s ease; box-shadow: 0 0 12px rgba(20, 12, 64, 0.12); display: flex; align-items: center; justify-content: center;">
-                                <div
-                                    style="width: 100%; height: 100%; border-radius: 50%; border: 1px dashed #c5a059; opacity: 0.8;">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Result Display Box -->
-                        <div
-                            style="background: #fcf9f2; border: 1px solid #e4cc95; border-radius: 12px; padding: 10px 15px; max-width: 350px; margin: 0 auto 15px; display: flex; align-items: center; justify-content: space-between;">
-                            <div style="text-align: left;">
-                                <span
-                                    style="font-size: 10px; color: #888; text-transform: uppercase; font-weight: bold;">Tahmini
-                                    Ölçünüz</span>
-                                <h4 style="font-size: 22px; font-weight: 800; color: #c5a059; margin: 0;"
-                                    id="mring-size-result-label-h">15</h4>
-                            </div>
-                            <div style="text-align: right; border-left: 1px solid #ede8df; padding-left: 15px;">
-                                <span style="font-size: 10px; color: #888; display: block; font-weight: 600;">İç
-                                    Çap</span>
-                                <span style="font-size: 13px; font-weight: 700; color: #140C40;"
-                                    id="mring-diameter-result-label-h">17.52 mm</span>
-                            </div>
-                        </div>
-
-                        <!-- Ring Slider & Fine Tuning Buttons -->
-                        <div style="max-width: 380px; margin: 0 auto 20px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
-                                <button type="button" class="btn-tune" onclick="tuneModalRingMeasureHome(-1)"
-                                    style="width:32px; height:32px; border-radius:50%; border:1px solid #ccc; background:#fff; font-size:16px; font-weight:bold; color:#555; cursor:pointer; outline:none; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);">-</button>
-                                <input type="range" id="mring-measure-slider-h" min="100" max="220" value="140"
-                                    oninput="resizeModalRingMeasureCircleHome(this.value)"
-                                    style="flex:1; height:6px; border-radius:5px; background:#c5a059; outline:none; -webkit-appearance:none; cursor:pointer;">
-                                <button type="button" class="btn-tune" onclick="tuneModalRingMeasureHome(1)"
-                                    style="width:32px; height:32px; border-radius:50%; border:1px solid #ccc; background:#fff; font-size:16px; font-weight:bold; color:#555; cursor:pointer; outline:none; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.05);">+</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Mode B: Choose Size and Display -->
-                    <div id="mmode-content-circles-h" style="display: none;">
-                        <p
-                            style="font-size: 12px; color: #666; line-height: 1.4; margin-bottom: 20px; max-width: 450px; margin-left: auto; margin-right: auto;">
-                            Öğrenmek istediğiniz **yüzük ölçüsünü** seçin. Ekranda tam olarak o ölçünün birebir fiziksel
-                            boyutundaki daire çizilecektir.
-                        </p>
-
-                        <!-- Selection Dropdown -->
-                        <div style="max-width: 260px; margin: 0 auto 20px;">
-                            <select id="msize-comparator-select-h" onchange="updateModalComparatorSizeHome(this.value)"
-                                style="width: 100%; padding: 10px; border: 1px solid #c5a059; border-radius: 8px; font-size: 13px; font-weight: 700; color: #140C40; outline: none; background: #fff; cursor: pointer;">
-                                <!-- Will be populated dynamically -->
-                            </select>
-                        </div>
-
-                        <!-- Comparison Circle Area -->
-                        <div
-                            style="height: 140px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative;">
-                            <div id="mring-compare-circle-h"
-                                style="width: 140px; height: 140px; border-radius: 50%; border: 3px solid #c5a059; background: radial-gradient(circle, rgba(197,160,89,0.05) 0%, rgba(197,160,89,0.15) 100%); display: flex; align-items: center; justify-content: center; transition: width 0.15s ease, height 0.15s ease;">
-                                <div style="font-size: 16px; font-weight: 800; color: #140C40;"
-                                    id="mring-compare-label-h">15</div>
-                            </div>
-                        </div>
-
-                        <div style="margin-bottom: 15px;">
-                            <span style="font-size: 12px; color: #888; font-weight: 600;">Seçilen Ölçü İç Çapı: <strong
-                                    style="color:#140C40;" id="mring-compare-diameter-label-h">17.52 mm</strong></span>
-                        </div>
-                    </div>
-
-                    <!-- Premium Bilgilendirme ve Uyarı Kutusu -->
-                    <div
-                        style="background: #fafaf9; border: 1px solid #e5dfd5; border-radius: 14px; padding: 16px; margin: 15px auto; max-width: 480px; text-align: left; box-shadow: 0 4px 15px rgba(0,0,0,0.02); display: flex; align-items: flex-start; gap: 14px;">
-                        <div
-                            style="font-size: 18px; font-weight: 700; color: #140C40; flex-shrink: 0; margin-top: 2px;">
-                            Kuyumcu
-                        </div>
-                        <div style="font-size: 11px; line-height: 1.6; color: #555; font-family: 'Inter', sans-serif;">
-                            <strong>Önemli Bilgilendirme:</strong> Kalibrasyonu doğru yapıp uygun ölçüyü seçtiğinizde,
-                            sistem %95 doğrulukla yüzük ölçünüzü hesaplar.<br><br>
-                            Emin değilseniz, <strong>"Yeniden Kalibre Et"</strong> butonuna basarak yeniden kalibrasyon
-                            yapabilirsiniz.<br><br>
-                            Ölçüm yöntemi sistemde görüntülenemediğinden, olası hatalardan <strong>biz</strong>
-                            sorumlu değildir.
-                        </div>
-                    </div>
-
-                    <!-- Footer actions -->
-                    <div style="display: flex; gap: 10px; max-width: 360px; margin: 0 auto;">
-                        <button type="button" class="btn-premium-secondary" onclick="goToModalStepHome(2)"
-                            style="border-radius:30px; padding: 10px 20px; font-size: 12px; height: auto;">Yeniden
-                            Kalibre Et</button>
-                        <button type="button" class="btn-premium-primary" onclick="applyRingSizeToHomeModal()"
-                            style="border-radius:30px; padding: 10px 20px; font-size: 12px; height: auto;">Ölçüyü
-                            Uygula</button>
-                    </div>
-                </div>
-
             </div>
         </div>
 

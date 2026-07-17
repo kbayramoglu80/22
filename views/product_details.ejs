@@ -89,11 +89,6 @@
                                 <div class="pdp-price-area">
                                     <span class="pdp-current-price" id="pdp-price" data-base="<%= product.price %>">₺
                                         <%= product.price.toLocaleString('tr-TR') %></span>
-                                    <% if (product.price> 1000) { %>
-                                        <span class="pdp-old-price">₺ <%= Math.round(product.price *
-                                                1.2).toLocaleString('tr-TR') %></span>
-                                        <% } %>
-
                                 </div>
 
                                 <div class="pdp-description"
